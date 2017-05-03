@@ -1,0 +1,15 @@
+<phpunit bootstrap="vendor/autoload.php">
+    <testsuites>
+        <testsuite name="PasswordlesAuth">
+            <directory>tests/PasswordlessAuth</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">src/dam1r89/PasswordlessAuth</directory>
+        </whitelist>
+    </filter>
+    <php>
+        <env name="APP_KEY" value="base64:Y3TiUllVDKEplPo858SkZtD8UAGatma/jfAqQcwldLo="/>
+    </php>
+</phpunit>

@@ -1,0 +1,22 @@
+{
+    "name": "dam1r89/lpasswordless-auth",
+    "description": "Authenticate users without password, only with email",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Damir Miladinov",
+            "email": "damir89@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "dam1r89\\PasswordlessAuth\\": ["src/PasswordlessAuth/", "tests/PasswordlessAuth"]
+        }
+    },
+    "require": {
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.1",
+        "orchestra/testbench": "~3.0"
+    }
+}
