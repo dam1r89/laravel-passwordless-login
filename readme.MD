@@ -3,9 +3,9 @@
 TODO
 
 - [ ] Add more tests
-- [+] Add migration
+- [x] Add migration
 - [ ] Configurable
-    - [+] Repository
+    - [x] Repository
 	- [ ] Route Prefix
 	- [ ] Email Content
 	- [ ] Signup timeout throttle
