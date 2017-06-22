@@ -30,9 +30,7 @@ class ExampleTest extends TestCase
 
         $email = $this->faker->email;
 
-        $this->assertDatabaseMissing('users', [
-           'email' => $email
-        ]);
+        $this->assertDatabaseMissing('users', compact('email'));
 
         $response = $this->post('/passwordless/login', [
             'email' => $email
@@ -44,13 +42,9 @@ class ExampleTest extends TestCase
 
         $this->assertNull(\Auth::user());
 
-        $this->assertDatabaseHas('login_tokens', [
-           'email' => $email
-        ]);
+        $this->assertDatabaseHas('login_tokens', compact('email'));
 
-        $this->assertDatabaseHas('users', [
-           'email' => $email
-        ]);
+        $this->assertDatabaseHas('users', compact('email'));
 
     }
 
@@ -108,7 +102,53 @@ class ExampleTest extends TestCase
         $response->assertRedirect('/home');
 
         $this->assertNotNull(\Auth::user());
+    }
 
+    public function testNotUsingSignUp()
+    {
+        Mail::fake();
+
+        $this->app['config']->set('passwordless.sign_up', false);
+
+        $email = $this->faker->email;
+
+        $this->assertDatabaseMissing('users', compact('email'));
+
+        $response = $this->post('/passwordless/login', [
+            'email' => $email
+        ]);
+
+        $response->assertStatus(302);
+
+        $this->assertRegexp('/User with  e-mail ".+?" not found/', app('session.store')->get('status'));
+
+        $this->assertDatabaseMissing('login_tokens', compact('email'));
+        $this->assertDatabaseMissing('users', compact('email'));
+
+    }
+
+    public function testResponseMessage()
+    {
+        Mail::fake();
+
+        $this->app['config']->set('passwordless.sign_up', false);
+
+        $email = $this->faker->email;
+
+        User::forceCreate(['email' => $email, 'name' => '', 'password' => '']);
+
+        $this->assertDatabaseHas('users', compact('email'));
+
+        $this->post('/passwordless/login', [
+            'email' => $email
+        ]);
+
+        $response = $this->post('/passwordless/login', [
+            'email' => $email
+        ]);
+
+        $response->assertStatus(302)
+            ->assertSessionHas('status', 'We have e-mailed your sign in link!');
 
     }
 

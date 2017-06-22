@@ -35,7 +35,7 @@ class PasswordlessBroker
     {
         $user = $this->users->retrieveByEmail($email);
         if (is_null($user)) {
-            return false;
+            throw new \Exception(sprintf('User with  e-mail "%s" not found', $email));
         }
 
         if (!$this->checkIfTokenShouldBeSent($email)) {
@@ -65,7 +65,8 @@ class PasswordlessBroker
     {
         $user = $this->users->retrieveByEmail($email);
 
-        if (is_null($user)) {
+        if (is_null($user) && config('passwordless.sign_up')) {
+
             // TODO: Create contract for this
             $this->users->newQuery()->forceCreate([
                 'email' => $email,
@@ -79,6 +80,9 @@ class PasswordlessBroker
 
     public function getLogin($token)
     {
+
+        // TODO: Add token lifetime
+
         // Login can be used only once, after first access
         // it is removed.
         $login = LoginToken::whereToken($token)->first();

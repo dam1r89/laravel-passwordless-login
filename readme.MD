@@ -34,15 +34,15 @@ TODO
 
 - [ ] Add more tests
 - [x] Add migration
-- [ ] Configurable
+- [x] Configurable
     - [x] Repository
 	- [x] Route Prefix
 	- [x] Email Content
 	- [x] Signup timeout throttle
 - [ ] Trait for user
-- [ ] Login or Login plus Sign Up
+- [x] Login or Login plus Sign Up
 - [ ] Remove create user logic from broker
-- [ ] Publishing
+- [x] Publishing
 	- [x] Emails
 	- [x] config
 - [ ] Write docs

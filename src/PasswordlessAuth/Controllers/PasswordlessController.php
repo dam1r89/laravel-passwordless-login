@@ -30,9 +30,16 @@ class PasswordlessController extends Controller
 
         $email = $request->get('email');
 
-        $broker->loginOrRegister($email, session('url.intended'));
+        try{
+            $broker->loginOrRegister($email, session('url.intended'));
 
-        return redirect()->back()->with('status', 'We have e-mailed your sign in link!');
+            return redirect()->back()->with('status', 'We have e-mailed your sign in link!');
+        }
+        catch(\Exception $e){
+            return redirect()->back()->with('status', $e->getMessage());
+        }
+
+
     }
 
     public function auth(Request $request, PasswordlessBroker $broker)
