@@ -4,7 +4,7 @@
 
 Publish config
 
-	php artisan vendor:publish --tag="passwordless"
+	php artisan vendor:publish --tag=passwordless
 
 
 User must implement `dam1r89\PasswordlessAuth\Contracts\UsersProvider` contract or if user is instance of eloquent model just use `CanLoginWithEmail` trait.
@@ -20,19 +20,29 @@ And run migration
 
 	php artisan migrate
 
+
+## Visual part
+
+Publish basic views which you can edit in `resources/views/vendor/passwordless`:
+
+	php artisan vendor:publish --tag=passwordless-views
+
+Template for sign-in form and for email is there.
+
+
 TODO
 
 - [ ] Add more tests
 - [x] Add migration
 - [ ] Configurable
     - [x] Repository
-	- [ ] Route Prefix
-	- [ ] Email Content
+	- [x] Route Prefix
+	- [x] Email Content
 	- [ ] Signup timeout throttle
 - [ ] Trait for user
 - [ ] Login or Login plus Sign Up
 - [ ] Remove create user logic from broker
 - [ ] Publishing
-	- [ ] Emails
-	- [ ] config
+	- [x] Emails
+	- [x] config
 - [ ] Write docs

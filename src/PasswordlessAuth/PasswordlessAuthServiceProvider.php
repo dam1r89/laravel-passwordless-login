@@ -20,6 +20,10 @@ class PasswordlessAuthServiceProvider extends ServiceProvider
 
         $this->publishes([__DIR__ . '/config.php' => config_path('passwordless.php')], 'passwordless');
 
+        $this->publishes([
+            __DIR__.'/views' => resource_path('views/vendor/passwordless'),
+        ], 'passwordless-views');
+
         $this->routePrefix = $this->app['config']->get('passwordless.route_prefix');
 
         $this->app->bind(UsersProvider::class, function($app) {
