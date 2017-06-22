@@ -59,6 +59,7 @@ class PasswordlessBroker
         $user = $this->users->retrieveByEmail($email);
 
         if (is_null($user)) {
+            // TODO: Create contract for this
             $this->users->newQuery()->forceCreate([
                 'email' => $email,
                 'name' => '',

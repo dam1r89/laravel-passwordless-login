@@ -1,5 +1,5 @@
 {
-    "name": "dam1r89/lpasswordless-auth",
+    "name": "dam1r89/passwordless-auth",
     "description": "Authenticate users without password, only with email",
     "type": "library",
     "authors": [

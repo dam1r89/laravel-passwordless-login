@@ -40,7 +40,7 @@
                         <div class="form-group">
                             <div class="col-md-8 col-md-offset-4">
                                 <button type="submit" class="btn btn-primary">
-                                    <i class="fa m-r-xs fa-sign-in"></i>Send Sign-In Rnng
+                                    <i class="fa m-r-xs fa-sign-in"></i>Send Sign-In Link
                                 </button>
                             </div>
                         </div>
