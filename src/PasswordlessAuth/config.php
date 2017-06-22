@@ -7,5 +7,10 @@ return [
 	'route_prefix' => 'passwordless',
 
 	// TODO: Check if this is required
-	'provider' => \App\User::class
+	'provider' => \App\User::class,
+
+	/**
+	 * Number of minutes user must wait before receiving new sign-up link.
+	 */
+	'throttle' => 60 * 10,
 ];

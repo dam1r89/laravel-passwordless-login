@@ -8,10 +8,13 @@ use dam1r89\PasswordlessAuth\User;
 abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
 
+    protected $faker;
+
     public function setUp()
     {
         parent::setUp();
         $this->setUpDatabase($this->app);
+        $this->faker = \Faker\Factory::create();
 
     }
 

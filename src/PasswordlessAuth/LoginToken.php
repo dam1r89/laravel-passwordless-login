@@ -12,10 +12,10 @@ class LoginToken extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['email', 'intended_url'];
+    protected $fillable = ['email', 'intended_url', 'created_at'];
 
     protected $casts = [
-        'created_at' => 'date'
+        'created_at' => 'datetime'
     ];
 
     public function make(array $attrs = [])

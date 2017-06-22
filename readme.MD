@@ -38,7 +38,7 @@ TODO
     - [x] Repository
 	- [x] Route Prefix
 	- [x] Email Content
-	- [ ] Signup timeout throttle
+	- [x] Signup timeout throttle
 - [ ] Trait for user
 - [ ] Login or Login plus Sign Up
 - [ ] Remove create user logic from broker

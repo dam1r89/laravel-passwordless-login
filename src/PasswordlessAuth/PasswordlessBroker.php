@@ -20,13 +20,15 @@ class PasswordlessBroker
         $this->mail = $mail;
     }
 
-    private function checkIfTokenShouldBeResent($email)
+    private function checkIfTokenShouldBeSent($email)
     {
 
         // If token doesn't exists or if it is send in
-        // last 10 minutes to avoid abuse
+        // last x seconds defined in config to avoid abuse
         $token = LoginToken::whereEmail($email)->first();
-        return is_null($token) || Carbon::now()->subMinutes(10)->gt($token->created_at);
+
+        return is_null($token) || 
+            Carbon::now()->subSeconds(config('passwordless.throttle'))->gt($token->created_at);
     }
 
     public function sendLoginLink($email, $intendedUrl = null)
@@ -36,15 +38,20 @@ class PasswordlessBroker
             return false;
         }
 
-        if (!$this->checkIfTokenShouldBeResent($email)) {
+        if (!$this->checkIfTokenShouldBeSent($email)) {
             // TODO: Check if intended url should be updated here
             return true;
         }
 
-        $token = LoginToken::create([
-            'email' => $email,
-            'intended_url' => $intendedUrl
+        $token = LoginToken::firstOrNew([
+            'email' => $email
         ]);
+
+        $token->fill([
+            'intended_url' => $intendedUrl,
+            'created_at' => Carbon::now()
+        ])->save();
+
 
         $this->mail->send('passwordless::email.link', compact('token'), function (Message $mail) use ($user) {
             $mail->to($user->email)
