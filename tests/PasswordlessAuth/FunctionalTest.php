@@ -32,9 +32,7 @@ class ExampleTest extends TestCase
 
         $this->assertDatabaseMissing('users', compact('email'));
 
-        $response = $this->post('/passwordless/login', [
-            'email' => $email
-        ]);
+        $response = $this->post('/passwordless/login', compact('email'));
 
         $response
             ->assertStatus(302)
@@ -85,9 +83,7 @@ class ExampleTest extends TestCase
         $email = $this->faker->email;
 
 
-        $response = $this->post('/passwordless/login', [
-            'email' => $email
-        ]);
+        $response = $this->post('/passwordless/login', compact('email'));
 
         $user = User::whereEmail($email)->first();
 
@@ -114,9 +110,7 @@ class ExampleTest extends TestCase
 
         $this->assertDatabaseMissing('users', compact('email'));
 
-        $response = $this->post('/passwordless/login', [
-            'email' => $email
-        ]);
+        $response = $this->post('/passwordless/login', compact('email'));
 
         $response->assertStatus(302);
 
@@ -139,26 +133,40 @@ class ExampleTest extends TestCase
 
         $this->assertDatabaseHas('users', compact('email'));
 
-        $this->post('/passwordless/login', [
-            'email' => $email
-        ]);
+        $this->post('/passwordless/login', compact('email'));
 
-        $response = $this->post('/passwordless/login', [
-            'email' => $email
-        ]);
+        $response = $this->post('/passwordless/login', compact('email'));
 
         $response->assertStatus(302)
             ->assertSessionHas('status', 'We have e-mailed your sign in link!');
 
     }
 
-    public function testMultipleSignUps()
-    {
-
-    }
-
     public function testRedirectToIntended()
     {
+        Mail::fake();
+
+        $email = $this->faker->email;
+
+        $response = $this->get('protected');
+
+        $response->assertRedirect('/login');
+
+        $response = $this->post('/passwordless/login', compact('email'));
+
+        $user = User::whereEmail($email)->first();
+
+        $token = LoginToken::whereEmail($email)->first()->token;
+
+
+        $response = $this->get(route('passwordless.auth', compact('token')));
         
+        $response->assertRedirect('/protected');
+
+        $response = $this->get('protected');
+        
+        $response->assertSee('protected content');
+
+        $this->assertNotNull(\Auth::user());
     }
 }

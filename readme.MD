@@ -1,4 +1,4 @@
-# Laravel Passwordless LogIn
+## Laravel Passwordless Auth
 
 `composer require dam1r89/passwordless-auth`
 
@@ -7,42 +7,31 @@ Publish config
 	php artisan vendor:publish --tag=passwordless
 
 
-User must implement `dam1r89\PasswordlessAuth\Contracts\UsersProvider` contract or if user is instance of eloquent model just use `CanLoginWithEmail` trait.
+User must implement `dam1r89\PasswordlessAuth\Contracts\UsersProvider` contract or if user is instance of eloquent model just use `UsersRepository` trait.
 
-	use dam1r89\PasswordlessAuth\CanLoginWithEmail;
+	use dam1r89\PasswordlessAuth\UsersRepository;
 	use dam1r89\PasswordlessAuth\Contracts\UsersProvider;
 
 	class User extends SparkUser implements UsersProvider
 	{
-	    use CanLoginWithEmail;
+	    use UsersRepository;
 
-And run migration
+... and run migration
 
 	php artisan migrate
 
+## Redirection users to passwordless sign-i	n form:
 
-## Visual part
+Modify `/app/Exceptions/Handler.php`. Change `return redirect()->guest(route('login'));` to:
 
-Publish basic views which you can edit in `resources/views/vendor/passwordless`:
+	return redirect()->guest(route('passwordless.login'));
+
+
+## Visual
+
+Publish views and email template.
 
 	php artisan vendor:publish --tag=passwordless-views
 
-Template for sign-in form and for email is there.
+Views are located under `resources/views/vendor/passwordless` folder.
 
-
-TODO
-
-- [ ] Add more tests
-- [x] Add migration
-- [x] Configurable
-    - [x] Repository
-	- [x] Route Prefix
-	- [x] Email Content
-	- [x] Signup timeout throttle
-- [ ] Trait for user
-- [x] Login or Login plus Sign Up
-- [ ] Remove create user logic from broker
-- [x] Publishing
-	- [x] Emails
-	- [x] config
-- [ ] Write docs

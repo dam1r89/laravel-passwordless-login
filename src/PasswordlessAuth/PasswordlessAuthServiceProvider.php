@@ -9,7 +9,6 @@ use dam1r89\PasswordlessAuth\Contracts\UsersProvider;
 class PasswordlessAuthServiceProvider extends ServiceProvider
 {
 
-	// Intentionally not having Http, you can organize this however you want - really cool
     private $controllersNamespace = 'dam1r89\PasswordlessAuth\Controllers';
 
     private $routePrefix = 'passwordless';

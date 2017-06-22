@@ -68,11 +68,7 @@ class PasswordlessBroker
         if (is_null($user) && config('passwordless.sign_up')) {
 
             // TODO: Create contract for this
-            $this->users->newQuery()->forceCreate([
-                'email' => $email,
-                'name' => '',
-                'password' => bcrypt(str_random(64))
-            ]);
+            $this->users->createWithEmail($email);
         }
 
         return $this->sendLoginLink($email, $intendedUrl);

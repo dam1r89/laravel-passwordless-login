@@ -4,6 +4,7 @@ namespace dam1r89\PasswordlessAuth;
 
 use Illuminate\Database\Schema\Blueprint;
 use dam1r89\PasswordlessAuth\User;
+use Route;
 
 abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
@@ -14,6 +15,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     {
         parent::setUp();
         $this->setUpDatabase($this->app);
+        $this->setUpRoutes($this->app);
         $this->faker = \Faker\Factory::create();
 
     }
@@ -48,6 +50,13 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
         // Setup User provider
         $app['config']->set('passwordless.provider', User::class);
 
+    }
+
+    public function setUpRoutes()
+    {
+        Route::get('protected', function(){
+            return 'protected content';
+        })->middleware('auth');
     }
 
 
