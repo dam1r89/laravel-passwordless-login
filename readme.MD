@@ -9,6 +9,11 @@
 
 `composer require dam1r89/passwordless-auth`
 
+Add provider in `cinfig/app.php`:
+
+	dam1r89\PasswordlessAuth\PasswordlessAuthServiceProvider::class,
+
+
 Publish config
 
 	php artisan vendor:publish --tag=passwordless

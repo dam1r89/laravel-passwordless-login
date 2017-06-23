@@ -11,10 +11,13 @@ trait UsersRepository
     
     public function createWithEmail($email)
     {
-        $this->newQuery()->forceCreate([
+        $user = new static();
+        $user->forceFill([
             'email' => $email,
             'name' => '',
             'password' => bcrypt(str_random(64))
         ]);
+        $user->save();
+
     }
 }
