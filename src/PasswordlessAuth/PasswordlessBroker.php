@@ -82,6 +82,11 @@ class PasswordlessBroker
         // Login can be used only once, after first access
         // it is removed.
         $login = LoginToken::whereToken($token)->first();
+
+        if (is_null($login)) {
+            return $login;
+        }
+
         $copy = clone $login;
         $login->delete();
 

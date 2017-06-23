@@ -53,7 +53,6 @@ class PasswordlessController extends Controller
 
         Auth::login($login->user);
 
-
         return redirect($login->intended_url ?: $this->redirectTo);
     }
 }

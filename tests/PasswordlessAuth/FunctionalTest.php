@@ -211,4 +211,24 @@ class ExampleTest extends TestCase
 
         $this->assertEquals(2, LoginToken::whereEmail($email)->count());
     }
+
+    public function testUsingLinkTwice()
+    {
+        Mail::fake();
+
+        $email = $this->faker->email;
+        $user = User::forceCreate(['email' => $email, 'name' => '', 'password' => '']);
+
+        $response = $this->post('/passwordless/login', compact('email'));
+
+        $link = LoginToken::whereEmail($email)->first()->getLoginLink();
+
+        $response = $this->get($link);
+        $response->assertRedirect('/home');
+
+        $response = $this->get($link);
+        $response->assertRedirect('/passwordless/login');
+
+
+    }
 }

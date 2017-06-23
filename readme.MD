@@ -48,9 +48,13 @@ To replace current login link with passwordless use this route name:
 
 ## Passwordless Links
 
-Sometimes you want to send a link via email that will automatically sign-in user. You can do that with `PasswordlessLink` class.
+Sometimes you want to send a link via email that will automatically sign-in user. You can do that with `PasswordlessLink` class. Exemple for notifications.
 
-	$link = PasswordlessLink::for($request->user())->url('/route/to/resource');
+	use dam1r89\PasswordlessAuth\PasswordlessLink;
+	
+	$link = PasswordlessLink::for($notifiable)->url('/route/to/resource');
+
+**Note:** this can be dangerous if link is not used and email is forwarded.
 
 ### Similar package
 
