@@ -52,11 +52,18 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 
     }
 
-    public function setUpRoutes()
+    public function setUpRoutes($app)
     {
-        Route::get('protected', function(){
+        $router = $app['router'];
+        $router->get('protected', function(){
             return 'protected content';
         })->middleware('auth');
+
+        $router->get('named/route', function(){
+            return 'some random content';
+        })->name('namedRoute');
+        
+        $router->getRoutes()->refreshNameLookups(); 
     }
 
 

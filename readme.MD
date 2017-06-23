@@ -1,5 +1,12 @@
 ## Laravel Passwordless Auth
 
+**Features**
+
+- Routes are configured (default /passwordless/login)
+- Email template
+- Sign-in and/or sign-up mode
+- Send mail throttling
+
 `composer require dam1r89/passwordless-auth`
 
 Publish config
@@ -35,3 +42,16 @@ Publish views and email template.
 
 Views are located under `resources/views/vendor/passwordless` folder.
 
+To replace current login link with passwordless use this route name:
+
+	<a href="{{ route('passwordless') }}">Login</a>
+
+## Passwordless Links
+
+Sometimes you want to send a link via email that will automatically sign-in user. You can do that with `PasswordlessLink` class.
+
+	$link = PasswordlessLink::for($request->user())->url('/route/to/resource');
+
+### Similar package
+
+[Laravel Passwordless Auth](https://github.com/Whyounes/laravel-passwordless-auth) 

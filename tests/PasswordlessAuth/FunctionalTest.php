@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Mail;
+use dam1r89\PasswordlessAuth\PasswordlessLink;
 
 
 class ExampleTest extends TestCase
@@ -168,5 +169,46 @@ class ExampleTest extends TestCase
         $response->assertSee('protected content');
 
         $this->assertNotNull(\Auth::user());
+    }
+
+    public function testPasswordlessLink()
+    {
+        $email = $this->faker->email;
+        $user = User::forceCreate(['email' => $email, 'name' => '', 'password' => '']);
+
+        $link = PasswordlessLink::for($user)->url('/protected-resource');
+
+        $this->assertNotNull($link);
+
+        $response = $this->get($link);
+
+        $response->assertRedirect('/protected-resource');
+    }
+
+    public function testPasswordlessLinkRoute()
+    {
+        $email = $this->faker->email;
+        $user = User::forceCreate(['email' => $email, 'name' => '', 'password' => '']);
+
+        $link = PasswordlessLink::for($user)->route('namedRoute', ['some' => 'param']);
+
+        $response = $this->get($link)
+            ->assertRedirect('named/route?some=param');
+
+    }
+
+    public function testPasswordlessLinkNotCreatingDuplicatesForSameLink()
+    {
+        $email = $this->faker->email;
+        $user = User::forceCreate(['email' => $email, 'name' => '', 'password' => '']);
+
+        PasswordlessLink::for($user)->url('/protected-resource');
+        PasswordlessLink::for($user)->url('/protected-resource');
+
+        $this->assertEquals(1, LoginToken::whereEmail($email)->count());
+
+        PasswordlessLink::for($user)->url('/second-resource');
+
+        $this->assertEquals(2, LoginToken::whereEmail($email)->count());
     }
 }
