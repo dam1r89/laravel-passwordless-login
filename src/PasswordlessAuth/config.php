@@ -22,4 +22,9 @@ return [
      * in database.
      */
     'sign_up' => true,
+
+    /**
+     * Redirect url after user is signed and there is no intended url set
+     */
+    'redirect_to' => 'home'
 ];

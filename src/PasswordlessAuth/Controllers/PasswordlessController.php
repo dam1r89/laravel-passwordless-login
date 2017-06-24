@@ -15,8 +15,6 @@ class PasswordlessController extends Controller
     // use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
     use ValidatesRequests;
 
-	protected $redirectTo = '/home';
-
     public function form()
     {
         return view('passwordless::login');
@@ -53,6 +51,11 @@ class PasswordlessController extends Controller
 
         Auth::login($login->user);
 
-        return redirect($login->intended_url ?: $this->redirectTo);
+        return redirect($login->intended_url ?: $this->redirectUrl());
+    }
+
+    protected function redirectUrl()
+    {
+        return config('passwordless.redirect_to', '/home');
     }
 }

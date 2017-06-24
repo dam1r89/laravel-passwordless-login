@@ -229,6 +229,22 @@ class ExampleTest extends TestCase
         $response = $this->get($link);
         $response->assertRedirect('/passwordless/login');
 
+    }
 
+    public function testRedirectConfig()
+    {
+        Mail::fake();
+
+        $email = $this->faker->email;
+        $user = User::forceCreate(['email' => $email, 'name' => '', 'password' => '']);
+
+        $response = $this->post('/passwordless/login', compact('email'));
+
+        $link = LoginToken::whereEmail($email)->first()->getLoginLink();
+
+        $this->app['config']->set('passwordless.redirect_to', '/dashboard');
+
+        $response = $this->get($link);
+        $response->assertRedirect('/dashboard');
     }
 }

@@ -9,7 +9,7 @@
 
 `composer require dam1r89/passwordless-auth`
 
-Add provider in `cinfig/app.php`:
+Add provider in `config/app.php`:
 
 	dam1r89\PasswordlessAuth\PasswordlessAuthServiceProvider::class,
 
