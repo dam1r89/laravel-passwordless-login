@@ -8,7 +8,7 @@ trait UsersRepository
     {
         return $this->newQuery()->whereEmail($email)->first();
     }
-    
+    // TODO: Make sure this returns user.
     public function createWithEmail($email)
     {
         $user = new static();
@@ -18,6 +18,8 @@ trait UsersRepository
             'password' => bcrypt(str_random(64))
         ]);
         $user->save();
+
+        return $user;
 
     }
 }

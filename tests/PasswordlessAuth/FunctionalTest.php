@@ -2,11 +2,13 @@
 
 namespace dam1r89\PasswordlessAuth;
 
+use Event;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Mail;
+use dam1r89\PasswordlessAuth\Events\UserRegistered;
 use dam1r89\PasswordlessAuth\PasswordlessLink;
 
 
@@ -246,5 +248,26 @@ class ExampleTest extends TestCase
 
         $response = $this->get($link);
         $response->assertRedirect('/dashboard');
+    }
+
+    public function testTrigeringEvent()
+    {
+
+        Mail::fake();
+        Event::fake();
+
+        $email = $this->faker->email;
+
+        $this->assertDatabaseMissing('users', compact('email'));
+
+        $response = $this->post('/passwordless/login', compact('email'));
+
+
+        Event::assertDispatched(UserRegistered::class, function ($e) {
+            return $e->user !== null;
+        });
+
+
+        $this->assertDatabaseHas('users', compact('email'));
     }
 }

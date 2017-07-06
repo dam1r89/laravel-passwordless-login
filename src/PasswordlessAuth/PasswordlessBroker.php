@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Mail\Message;
 use dam1r89\PasswordlessAuth\Contracts\UsersProvider;
+use dam1r89\PasswordlessAuth\Events\UserRegistered;
 
 class PasswordlessBroker
 {
@@ -68,7 +69,8 @@ class PasswordlessBroker
         if (is_null($user) && config('passwordless.sign_up')) {
 
             // TODO: Create contract for this
-            $this->users->createWithEmail($email);
+            $user = $this->users->createWithEmail($email);
+            event(new UserRegistered($user));
         }
 
         return $this->sendLoginLink($email, $intendedUrl);
