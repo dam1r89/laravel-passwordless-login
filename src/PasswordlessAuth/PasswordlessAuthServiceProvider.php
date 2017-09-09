@@ -1,23 +1,22 @@
 <?php
+
 namespace dam1r89\PasswordlessAuth;
 
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 use dam1r89\PasswordlessAuth\Contracts\UsersProvider;
 
-
 class PasswordlessAuthServiceProvider extends ServiceProvider
 {
-
     private $controllersNamespace = 'dam1r89\PasswordlessAuth\Controllers';
 
     private $routePrefix = 'passwordless';
 
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__ . '/config.php', 'passwordless');
+        $this->mergeConfigFrom(__DIR__.'/config.php', 'passwordless');
 
-        $this->publishes([__DIR__ . '/config.php' => config_path('passwordless.php')], 'passwordless');
+        $this->publishes([__DIR__.'/config.php' => config_path('passwordless.php')], 'passwordless');
 
         $this->publishes([
             __DIR__.'/views' => resource_path('views/vendor/passwordless'),
@@ -25,11 +24,10 @@ class PasswordlessAuthServiceProvider extends ServiceProvider
 
         $this->routePrefix = $this->app['config']->get('passwordless.route_prefix');
 
-        $this->app->bind(UsersProvider::class, function($app) {
+        $this->app->bind(UsersProvider::class, function ($app) {
             return $app->make($app['config']['passwordless.provider']);
         });
     }
-
 
     public function boot()
     {
@@ -44,11 +42,9 @@ class PasswordlessAuthServiceProvider extends ServiceProvider
         $router->group([
             'namespace' => $this->controllersNamespace,
             'middleware' => 'web',
-            'prefix' => $this->routePrefix
+            'prefix' => $this->routePrefix,
         ], function () {
-            require __DIR__ . '/routes.php';
+            require __DIR__.'/routes.php';
         });
     }
-
-
 }

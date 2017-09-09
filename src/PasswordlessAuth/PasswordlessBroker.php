@@ -23,12 +23,11 @@ class PasswordlessBroker
 
     private function checkIfTokenShouldBeSent($email)
     {
-
         // If token doesn't exists or if it is send in
         // last x seconds defined in config to avoid abuse
         $token = LoginToken::whereEmail($email)->first();
 
-        return is_null($token) || 
+        return is_null($token) ||
             Carbon::now()->subSeconds(config('passwordless.throttle'))->gt($token->created_at);
     }
 
@@ -36,7 +35,7 @@ class PasswordlessBroker
     {
         $user = $this->users->retrieveByEmail($email);
         if (is_null($user)) {
-            throw new \Exception(sprintf('User with  e-mail "%s" not found', $email));
+            throw new \Exception(sprintf('User with e-mail "%s" not found', $email));
         }
 
         if (!$this->checkIfTokenShouldBeSent($email)) {
@@ -45,14 +44,13 @@ class PasswordlessBroker
         }
 
         $token = LoginToken::firstOrNew([
-            'email' => $email
+            'email' => $email,
         ]);
 
         $token->fill([
             'intended_url' => $intendedUrl,
-            'created_at' => Carbon::now()
+            'created_at' => Carbon::now(),
         ])->save();
-
 
         $this->mail->send('passwordless::email.link', compact('token'), function (Message $mail) use ($user) {
             $mail->to($user->email)
@@ -67,7 +65,6 @@ class PasswordlessBroker
         $user = $this->users->retrieveByEmail($email);
 
         if (is_null($user) && config('passwordless.sign_up')) {
-
             // TODO: Create contract for this
             $user = $this->users->createWithEmail($email);
             event(new UserRegistered($user));
@@ -78,7 +75,6 @@ class PasswordlessBroker
 
     public function getLogin($token)
     {
-
         // TODO: Add token lifetime
 
         // Login can be used only once, after first access
@@ -94,5 +90,4 @@ class PasswordlessBroker
 
         return $copy;
     }
-    
 }

@@ -62,6 +62,9 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
         $router->get('named/route', function(){
             return 'some random content';
         })->name('namedRoute');
+
+        // Setup default auth redirect
+        $router->get('/login')->name('login');
         
         $router->getRoutes()->refreshNameLookups(); 
     }

@@ -6,41 +6,39 @@ use Carbon\Carbon;
 
 class PasswordlessLink
 {
-	private $forUser;
+    private $forUser;
 
+    private function __construct($forUser)
+    {
+        $this->forUser = $forUser;
+    }
 
-	private function __construct($forUser)
-	{
-		$this->forUser = $forUser;
-	}
+    public static function for($user)
+    {
+        return new static($user);
+    }
 
-	public static function for($user)
-	{
-		return new static($user);
-	}
+    public function url($url)
+    {
+        return $this->create(url($url));
+    }
 
-	public function url($url)
-	{
-		return $this->create(url($url));
-	}
+    public function route()
+    {
+        return $this->create(call_user_func_array('route', func_get_args()));
+    }
 
-	public function route()
-	{
-		return $this->create(call_user_func_array('route', func_get_args()));
-	}
+    private function create($url)
+    {
+        $token = LoginToken::firstOrNew([
+            'intended_url' => $url,
+            'email' => $this->forUser->email,
+        ]);
 
-	private function create($url)
-	{
-		$token = LoginToken::firstOrNew([
-			'intended_url' => $url,
-			'email' => $this->forUser->email
-		]);
+        $token->created_at = Carbon::now();
 
-		$token->created_at = Carbon::now();
+        $token->save();
 
-		$token->save();
-
-		return $token->getLoginLink();
-	}
-
+        return $token->getLoginLink();
+    }
 }

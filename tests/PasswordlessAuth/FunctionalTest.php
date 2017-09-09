@@ -117,7 +117,7 @@ class ExampleTest extends TestCase
 
         $response->assertStatus(302);
 
-        $this->assertRegexp('/User with  e-mail ".+?" not found/', app('session.store')->get('status'));
+        $this->assertRegexp('/User with e-mail ".+?" not found/', app('session.store')->get('status'));
 
         $this->assertDatabaseMissing('login_tokens', compact('email'));
         $this->assertDatabaseMissing('users', compact('email'));
@@ -269,5 +269,35 @@ class ExampleTest extends TestCase
 
 
         $this->assertDatabaseHas('users', compact('email'));
+    }
+
+    public static function rememberSettings()
+    {
+        return [
+            [true],
+            [false],
+        ];
+    }
+
+    /**
+     * @dataProvider rememberSettings
+     */
+    public function testRememberingUser($useRemember)
+    {
+        Mail::fake();
+        $this->app['config']->set('passwordless.remember', $useRemember);
+
+        $email = $this->faker->email;
+
+        $response = $this->post('/passwordless/login', compact('email'));
+
+        $this->assertDatabaseHas('users', compact('email'));
+
+        $this->assertNull(User::whereEmail($email)->first()->remember_token);
+
+        $token = LoginToken::whereEmail($email)->first()->token;
+        $response = $this->get(route('passwordless.auth', compact('token')));
+
+        $this->assertTrue(User::whereEmail($email)->first()->remember_token == $useRemember);
     }
 }

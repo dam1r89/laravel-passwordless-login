@@ -15,7 +15,7 @@ class LoginToken extends Model
     protected $fillable = ['email', 'intended_url', 'created_at'];
 
     protected $casts = [
-        'created_at' => 'datetime'
+        'created_at' => 'datetime',
     ];
 
     public function make(array $attrs = [])
@@ -27,7 +27,6 @@ class LoginToken extends Model
 
         return parent::create($attrs);
     }
-
 
     protected static function boot()
     {
@@ -51,18 +50,18 @@ class LoginToken extends Model
     {
         $key = config('app.key');
 
-        /**
+        /*
          * @see \Illuminate\Auth\Passwords\PasswordBrokerManager::createTokenRepository
          */
         if (substr($key, 0, 7) == 'base64:') {
             $key = base64_decode(substr($key, 7));
         }
+
         return hash_hmac('sha256', str_random(40), $key);
     }
 
     public function getLoginLink()
     {
-        return route('passwordless.auth', ['token' => $this->token ]);
+        return route('passwordless.auth', ['token' => $this->token]);
     }
-
 }
