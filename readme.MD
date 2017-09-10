@@ -2,19 +2,22 @@
 
 **Features**
 
-- Routes are configured (default /passwordless/login)
-- Email template
+- Routes are predefined with package and are configurable (default /passwordless/login)
 - Sign-in and/or sign-up mode
+- Sends email
 - Send mail throttling
 
-`composer require dam1r89/passwordless-auth`
 
-Add provider in `config/app.php`:
+To get started install package:
+
+	composer require dam1r89/passwordless-auth
+
+Register the `dam1r89\PasswordlessAuth\PasswordlessAuthServiceProvider` provider in `config/app.php` configuration file.
 
 	dam1r89\PasswordlessAuth\PasswordlessAuthServiceProvider::class,
 
 
-Publish config
+Publish configuration.
 
 	php artisan vendor:publish --tag=passwordless
 
@@ -65,9 +68,9 @@ User must implement `dam1r89\PasswordlessAuth\Contracts\UsersProvider` contract 
 
 	php artisan migrate
 
-## Redirection users to passwordless sign-in form:
+## Using passwordless as a default sign-in method
 
-Modify `/app/Exceptions/Handler.php`. Change `return redirect()->guest(route('login'));` to:
+In `/app/Exceptions/Handler.php` change `return redirect()->guest(route('login'));` to:
 
 	return redirect()->guest(route('passwordless.login'));
 
@@ -92,7 +95,7 @@ Sometimes you want to send a link via email that will automatically sign-in user
 	
 	$link = PasswordlessLink::for($notifiable)->url('/route/to/resource');
 
-**Note:** this can be dangerous if link is not used and email is forwarded.
+**Note:** It is dangerous to forward emails with unused sign-in links because link gives direct access to account. 
 
 ### Similar package
 
