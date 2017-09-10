@@ -2,13 +2,12 @@
 
 **Features**
 
-- Routes are predefined with package and are configurable (default /passwordless/login)
+- Routes are predefined (default is `/passwordless/login`)
 - Sign-in and/or sign-up mode
-- Sends email
+- Sends sign-in email
 - Send mail throttling
 
-
-To get started install package:
+To get started, install package with composer:
 
 	composer require dam1r89/passwordless-auth
 
