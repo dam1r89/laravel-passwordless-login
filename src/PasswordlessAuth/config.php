@@ -32,4 +32,10 @@ return [
      * If user should be "remembered" after sign-in.
      */
     'remember' => true,
+
+
+    /*
+    * Name of e-mail field
+    */
+    'emailfield' => 'email',
 ];

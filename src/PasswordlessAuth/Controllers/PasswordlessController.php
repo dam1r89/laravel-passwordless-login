@@ -21,16 +21,17 @@ class PasswordlessController extends Controller
     public function login(Request $request, PasswordlessBroker $broker)
     {
         $this->validate($request, [
-            'email' => 'required|email',
+            config('passwordless.emailfield') => 'required|email',
         ]);
 
-        $email = $request->get('email');
+        $email = $request->get(config('passwordless.emailfield'));
 
         try {
             $broker->loginOrRegister($email, session('url.intended'));
 
             return redirect()->back()->with('status', __('We have e-mailed your sign in link!'));
         } catch (\Exception $e) {
+
             return redirect()->back()->with('status', $e->getMessage());
         }
     }
