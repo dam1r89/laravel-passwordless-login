@@ -54,7 +54,7 @@ class PasswordlessBroker
 
         $this->mail->send('passwordless::email.link', compact('token'), function (Message $mail) use ($user) {
             $mail->to($user->email)
-                ->subject('Here is your sign in link.');
+                ->subject(__('Here is your sign in link.'));
         });
 
         return true;
