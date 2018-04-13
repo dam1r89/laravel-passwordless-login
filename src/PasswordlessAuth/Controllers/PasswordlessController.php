@@ -29,7 +29,7 @@ class PasswordlessController extends Controller
         try {
             $broker->loginOrRegister($email, session('url.intended'));
 
-            return redirect()->back()->with('status', 'We have e-mailed your sign in link!');
+            return redirect()->back()->with('status', __('We have e-mailed your sign in link!'));
         } catch (\Exception $e) {
             return redirect()->back()->with('status', $e->getMessage());
         }
@@ -40,7 +40,7 @@ class PasswordlessController extends Controller
         $login = $broker->getLogin($request->get('token'));
 
         if (is_null($login)) {
-            return redirect()->route('passwordless.login')->with('status', 'Token not found or expired, please request new sign in link.');
+            return redirect()->route('passwordless.login')->with('status', __('Token not found or expired, please request new sign in link.'));
         }
 
         Auth::login($login->user, config('passwordless.remember'));
