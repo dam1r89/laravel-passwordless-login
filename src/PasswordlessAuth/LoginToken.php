@@ -4,6 +4,7 @@ namespace dam1r89\PasswordlessAuth;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class LoginToken extends Model
 {
@@ -57,7 +58,7 @@ class LoginToken extends Model
             $key = base64_decode(substr($key, 7));
         }
 
-        return hash_hmac('sha256', str_random(40), $key);
+        return hash_hmac('sha256', Str::random(40), $key);
     }
 
     public function getLoginLink()

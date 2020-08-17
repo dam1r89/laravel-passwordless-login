@@ -2,6 +2,8 @@
 
 namespace dam1r89\PasswordlessAuth;
 
+use Illuminate\Support\Str;
+
 trait UsersRepository
 {
     public function retrieveByEmail($email)
@@ -16,7 +18,7 @@ trait UsersRepository
         $user->forceFill([
             'email' => $email,
             'name' => '',
-            'password' => bcrypt(str_random(64)),
+            'password' => bcrypt(Str::random(64)),
         ]);
         $user->save();
 
