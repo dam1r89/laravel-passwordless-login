@@ -69,9 +69,42 @@ User must implement `dam1r89\PasswordlessAuth\Contracts\UsersProvider` contract 
 
 ## Using passwordless as a default sign-in method
 
+### For Laravel < 5.5 
+
 In `/app/Exceptions/Handler.php` change `return redirect()->guest(route('login'));` to:
 
 	return redirect()->guest(route('passwordless.login'));
+
+### For Larvel 5.5+
+
+Since Laravel 5.5 the `unauthenticated()` function in `/app/Exceptions/Handler.php` has moved to `vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php`.  
+
+You can still use this method but you have to override it.  In your `app/Exceptions/Handler.php` file include:
+
+```php
+use Request;
+use Illuminate\Auth\AuthenticationException;
+use Response;
+```
+
+and add the `unauthenticated` function:
+
+```php
+    /**
+     * Convert an authentication exception into an unauthenticated response.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Auth\AuthenticationException  $exception
+     * @return \Illuminate\Http\Response
+     */
+    protected function unauthenticated($request, AuthenticationException $exception)
+    {
+        if ($request->expectsJson()) {
+            return response()->json(['error' => 'Unauthenticated.'], 401);
+        }
+        return redirect()->guest(route('passwordless.login'));
+    }
+```
 
 
 ## Visual
