@@ -35,7 +35,7 @@ class PasswordlessBroker
     {
         $user = $this->users->retrieveByEmail($email);
         if (is_null($user)) {
-            throw new \Exception(sprintf('User with e-mail "%s" not found', $email));
+            throw new \Exception(__('User with e-mail :email not found', ['email'=>$email]));
         }
 
         if (!$this->checkIfTokenShouldBeSent($email)) {
@@ -54,7 +54,7 @@ class PasswordlessBroker
 
         $this->mail->send('passwordless::email.link', compact('token'), function (Message $mail) use ($user) {
             $mail->to($user->email)
-                ->subject('Here is your sign in link.');
+                ->subject(__('Here is your sign in link.'));
         });
 
         return true;
